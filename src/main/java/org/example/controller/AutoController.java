@@ -3,6 +3,8 @@ package org.example.controller;
 import org.example.entity.Auto;
 import org.example.service.AutoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,8 +44,14 @@ public class AutoController {
     public List<Auto> getAllAutos() {
         return autoService.getAllAutos();
     }
-    @GetMapping("/mostcarsbyyear")
-    public List<Map> getYearWithMostCarsByCarClass() {
-        return autoService.getYearWithMostCarsByCarClass();
+    @DeleteMapping("/{autoId}")
+    public ResponseEntity<String> deleteAutoIfAnyFieldIsEmpty(@PathVariable String autoId) {
+        autoService.deleteIfAnyFieldIsEmpty(autoId);
+        return ResponseEntity.ok("Автомобиль успешно удален, если хотя бы одно поле было пустым.");
+    }
+    @GetMapping("/countByType/{type}")
+    public ResponseEntity<Long> countAutosByType(@PathVariable String type) {
+        long count = autoService.countAutosByType(type);
+        return ResponseEntity.ok(count);
     }
 }
